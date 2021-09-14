@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="" />
+    <meta
+      name="author"
+      content="Mark Otto, Jacob Thornton, and Bootstrap contributors"
+    />
+    <meta name="generator" content="Hugo 0.87.0" />
+    <title>BOTW</title>
+
+    <link
+      rel="canonical"
+      href="https://getbootstrap.com/docs/5.1/examples/sign-in/"
+    />
+
+    <!-- Bootstrap core CSS -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+
+    <!-- Custom styles for this template -->
+    <link href="styles.css" rel="stylesheet" />
+  </head>
+  <body class="text-center">
+    <main class="form-signin">
+      <form action="/" method="post">
+        <img class="mb-4" src="zelda.png" alt="" width="108" height="85.5" />
+        <h1 class="h3 mb-3 fw-normal">
+          Breath of the Wild <br />
+          Item Search
+        </h1>
+
+        <div class="form-floating input-group">
+          <input
+            list="categories"
+            type="text"
+            class="form-control"
+            id="category"
+            name="category"
+            placeholder="Category"
+            autocomplete="off"
+            onkeydown="return false;"
+          />
+          <datalist id="categories">
+            <option value="Select/Random"></option>
+            <option value="creatures"></option>
+            <option value="monsters"></option>
+            <option value="equipment"></option>
+            <option value="materials"></option>
+            <option value="treasure"></option>
+          </datalist>
+          <button
+            class="w-15 btn btn-sm btn-secondary"
+            type="button"
+            onclick="document.getElementById('category').value = ''"
+          >
+            Clear
+          </button>
+        </div>
+        <div class="form-floating input-group my-1">
+          <input
+            list="locations"
+            type="text"
+            class="form-control"
+            id="location"
+            name="location"
+            placeholder="Location"
+            autocomplete="off"
+          />
+          <datalist id="locations"> </datalist>
+          <button
+            class="w-15 btn btn-sm btn-secondary"
+            type="button"
+            onclick="document.getElementById('location').value = ''"
+          >
+            Clear
+          </button>
+        </div>
+
+        <button class="w-50 btn btn-lg btn-primary mt-1" type="submit">
+          Search
+        </button>
+      </form>
+    </main>
+    <div class="remove">
+      Icons made by
+      <a
+        href="https://www.flaticon.com/authors/vitaly-gorbachev"
+        title="Vitaly Gorbachev"
+        >Vitaly Gorbachev</a
+      >
+      from
+      <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="index.js"></script>
+  </body>
+</html>
