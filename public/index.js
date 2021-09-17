@@ -47,7 +47,7 @@ $.getJSON("https://botw-compendium.herokuapp.com/api/v2", function (data) {
       }
     }
   }
-  vals = vals.filter((v, i, a) => a.indexOf(v) === i);
+  vals = vals.filter((v, i, a) => a.indexOf(v) === i).sort();
 
   var $location = $("#locations");
   $location.empty();
