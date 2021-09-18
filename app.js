@@ -61,6 +61,8 @@ app.post("/", (req, res) => {
           }
         } else if (userInputCategory == true) {
           categoryArray = [...categoryData];
+        } else {
+          categoryArray = categoryData[category];
         }
         return {
           category: category,
@@ -92,7 +94,8 @@ app.post("/", (req, res) => {
           });
           categoryArray = [...newArray];
           break;
-        } else if (userInputCategory == false) {
+        }
+        if (userInputCategory == false) {
           category = chooseNewCategory();
           categoryArray = categoryFilter(category);
         } else {

@@ -95,3 +95,8 @@ body {
   color: #fff;
   border-color: #004d40;
 }
+
+.form-floating {
+  display: flex;
+  justify-content: center;
+}
