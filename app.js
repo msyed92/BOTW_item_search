@@ -28,12 +28,15 @@ app.post("/", (req, res) => {
   let category = req.body.category;
   let location = req.body.location;
   let url = "https://botw-compendium.herokuapp.com/api/v2";
-  let userInputCategory;
+  let userInputCategory = true;
+  let userInputLocation = true;
   if (category == "Select/Random" || !category) {
     userInputCategory = false;
   } else {
     url += "/category/" + category;
-    userInputCategory = true;
+  }
+  if (location == "Select/Random" || !location) {
+    userInputLocation = false;
   }
   https.get(url, function (response) {
     let categoryStr = "";
@@ -43,65 +46,69 @@ app.post("/", (req, res) => {
     });
 
     response.on("end", function () {
+      //get JSON from url
       let categoryData = JSON.parse(categoryStr).data;
 
-      function categoryFilter(category) {
-        let categoryArray;
-        if (category == "Select/Random" || !category) {
-          category = chooseNewCategory();
-          categoryArray = categoryData[category];
-          userInputCategory = false;
-        }
-        if (category == "creatures") {
-          let type = chooseCreatureType();
-          if (userInputCategory == false) {
-            categoryArray = categoryData[category][type];
-          } else {
-            categoryArray = categoryData[type];
-          }
-        } else if (userInputCategory == true) {
-          categoryArray = [...categoryData];
+      //set array based on category
+      function categoryFilter(cat) {
+        let array;
+        if (cat == "Select/Random" || userInputCategory == false) {
+          cat = chooseNewCategory();
+          array = categoryData[cat];
         } else {
-          categoryArray = categoryData[category];
+          array = [...categoryData];
+        }
+        if (cat == "creatures") {
+          let type = chooseCreatureType();
+          array = array[type];
         }
         return {
-          category: category,
-          array: categoryArray,
-          input: userInputCategory,
+          category: cat,
+          array: array,
         };
       }
-      let categoryArray = categoryFilter(category).array;
-      category = categoryFilter(category).category;
-      userInputCategory = categoryFilter(category).input;
 
-      let locations = [];
-      for (let i = 0; i < categoryArray.length; i++) {
-        let loc = categoryArray[i].common_locations;
-        if (!!loc) {
-          for (let j = 0; j < loc.length; j++) {
-            locations.push(loc[j]);
+      //reset values based on filter
+      let categoryObj = categoryFilter(category);
+      category = categoryObj.category;
+      let categoryArray = categoryObj.array;
+
+      //array of locations that are available for that category
+
+      //filter out items in the category that match the location
+      function filterOnLocation(array, loc) {
+        let locations = [];
+        for (let i = 0; i < array.length; i++) {
+          let loc_ = array[i].common_locations;
+          if (!!loc_) {
+            for (let j = 0; j < loc_.length; j++) {
+              locations.push(loc_[j]);
+            }
           }
         }
-      }
-      locations = locations.filter((v, i, a) => a.indexOf(v) === i);
-
-      while (!!location) {
-        if (locations.includes(location)) {
-          let newArray = categoryArray.filter(function (arr) {
-            return (
-              !!arr.common_locations && arr.common_locations.includes(location)
-            );
+        locations = locations.filter((v, i, a) => a.indexOf(v) === i);
+        if (locations.includes(loc)) {
+          let newArray = array.filter(function (arr) {
+            return !!arr.common_locations && arr.common_locations.includes(loc);
           });
-          categoryArray = [...newArray];
-          break;
-        }
-        if (userInputCategory == false) {
-          category = chooseNewCategory();
-          categoryArray = categoryFilter(category);
+          return { arr: newArray, location: loc };
         } else {
-          location = locations[Math.floor(Math.random() * locations.length)];
+          if (userInputCategory == false) {
+            category = chooseNewCategory();
+            let newObj = categoryFilter(category);
+            array = newObj.array;
+            category = newObj.category;
+          }
+          if (userInputLocation == false) {
+            loc = locations[Math.floor(Math.random() * locations.length)];
+          }
+          return filterOnLocation(array, loc);
         }
       }
+
+      let newCatObj = filterOnLocation(categoryArray, location);
+      categoryArray = newCatObj.arr;
+      location = newCatObj.location;
 
       console.log(category);
       console.log(location);
@@ -147,10 +154,13 @@ function chooseNewCategory() {
     "treasure",
   ];
 
-  return itemTypes[Math.floor(Math.random() * itemTypes.length)];
+  let item = itemTypes[Math.floor(Math.random() * itemTypes.length)];
+
+  return item;
 }
 
 function chooseCreatureType() {
   const creatureTypes = ["food", "non_food"];
-  return creatureTypes[Math.round(Math.random())];
+  let type = creatureTypes[Math.floor(Math.random() * creatureTypes.length)];
+  return type;
 }
