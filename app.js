@@ -110,9 +110,6 @@ app.post("/", (req, res) => {
       categoryArray = newCatObj.arr;
       location = newCatObj.location;
 
-      console.log(category);
-      console.log(location);
-
       let random = Math.floor(Math.random() * categoryArray.length);
       let item = categoryArray[random];
 
