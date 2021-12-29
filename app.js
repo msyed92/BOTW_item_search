@@ -1,5 +1,4 @@
 import express from "express";
-import request from "request";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 import https from "https";
